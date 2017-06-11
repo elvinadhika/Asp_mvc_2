@@ -4,7 +4,20 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DemoDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DemoDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="laporan">
+          <Key>
+            <PropertyRef Name="id_laporan" />
+          </Key>
+          <Property Name="id_laporan" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_menu" Type="int" />
+          <Property Name="id_pelanggan" Type="int" />
+          <Property Name="keterangan" Type="varchar" MaxLength="255" />
+          <Property Name="meja" Type="int" />
+          <Property Name="quantity" Type="datetime" />
+          <Property Name="harga" Type="int" />
+          <Property Name="jumlah" Type="int" />
+        </EntityType>
         <EntityType Name="LOOKUPRole">
           <Key>
             <PropertyRef Name="LOOKUPRoleID" />
@@ -16,6 +29,26 @@
           <Property Name="RowCreatedDateTime" Type="datetime" />
           <Property Name="RowModifiedSYSUserID" Type="int" Nullable="false" />
           <Property Name="RowModifiedDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="menu">
+          <Key>
+            <PropertyRef Name="id_menu" />
+          </Key>
+          <Property Name="id_menu" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="menu" Type="varchar" MaxLength="255" />
+          <Property Name="stock" Type="int" />
+          <Property Name="harga" Type="int" />
+        </EntityType>
+        <EntityType Name="pelanggan">
+          <Key>
+            <PropertyRef Name="id_pelanggan" />
+          </Key>
+          <Property Name="id_pelanggan" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="no_id" Type="varchar" MaxLength="30" />
+          <Property Name="nama" Type="varchar" MaxLength="100" />
+          <Property Name="alamat" Type="varchar" MaxLength="100" />
+          <Property Name="no_tlp1" Type="varchar" MaxLength="30" />
+          <Property Name="no_tlp2" Type="varchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="SYSUser">
           <Key>
@@ -56,6 +89,30 @@
           <Property Name="RowModifiedSYSUserID" Type="int" Nullable="false" />
           <Property Name="RowModifiedDateTime" Type="datetime" />
         </EntityType>
+        <Association Name="FK__laporan__id_menu__49C3F6B7">
+          <End Role="menu" Type="Self.menu" Multiplicity="0..1" />
+          <End Role="laporan" Type="Self.laporan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="menu">
+              <PropertyRef Name="id_menu" />
+            </Principal>
+            <Dependent Role="laporan">
+              <PropertyRef Name="id_menu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__laporan__id_pela__48CFD27E">
+          <End Role="pelanggan" Type="Self.pelanggan" Multiplicity="0..1" />
+          <End Role="laporan" Type="Self.laporan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pelanggan">
+              <PropertyRef Name="id_pelanggan" />
+            </Principal>
+            <Dependent Role="laporan">
+              <PropertyRef Name="id_pelanggan" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__SYSUserPr__SYSUs__1BFD2C07">
           <End Role="SYSUser" Type="Self.SYSUser" Multiplicity="1" />
           <End Role="SYSUserProfile" Type="Self.SYSUserProfile" Multiplicity="*" />
@@ -93,10 +150,21 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="DemoDBModelStoreContainer">
+          <EntitySet Name="laporan" EntityType="Self.laporan" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LOOKUPRole" EntityType="Self.LOOKUPRole" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="menu" EntityType="Self.menu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pelanggan" EntityType="Self.pelanggan" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SYSUser" EntityType="Self.SYSUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SYSUserProfile" EntityType="Self.SYSUserProfile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SYSUserRole" EntityType="Self.SYSUserRole" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__laporan__id_menu__49C3F6B7" Association="Self.FK__laporan__id_menu__49C3F6B7">
+            <End Role="menu" EntitySet="menu" />
+            <End Role="laporan" EntitySet="laporan" />
+          </AssociationSet>
+          <AssociationSet Name="FK__laporan__id_pela__48CFD27E" Association="Self.FK__laporan__id_pela__48CFD27E">
+            <End Role="pelanggan" EntitySet="pelanggan" />
+            <End Role="laporan" EntitySet="laporan" />
+          </AssociationSet>
           <AssociationSet Name="FK__SYSUserPr__SYSUs__1BFD2C07" Association="Self.FK__SYSUserPr__SYSUs__1BFD2C07">
             <End Role="SYSUser" EntitySet="SYSUser" />
             <End Role="SYSUserProfile" EntitySet="SYSUserProfile" />
@@ -110,8 +178,7 @@
             <End Role="SYSUserRole" EntitySet="SYSUserRole" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DemoDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -225,7 +292,79 @@
             <End Role="SYSUser" EntitySet="SYSUsers" />
             <End Role="SYSUserRole" EntitySet="SYSUserRoles" />
           </AssociationSet>
+          <EntitySet Name="laporans" EntityType="DemoDBModel.laporan" />
+          <EntitySet Name="menus" EntityType="DemoDBModel.menu" />
+          <EntitySet Name="pelanggans" EntityType="DemoDBModel.pelanggan" />
+          <AssociationSet Name="FK__laporan__id_menu__49C3F6B7" Association="DemoDBModel.FK__laporan__id_menu__49C3F6B7">
+            <End Role="menu" EntitySet="menus" />
+            <End Role="laporan" EntitySet="laporans" />
+          </AssociationSet>
+          <AssociationSet Name="FK__laporan__id_pela__48CFD27E" Association="DemoDBModel.FK__laporan__id_pela__48CFD27E">
+            <End Role="pelanggan" EntitySet="pelanggans" />
+            <End Role="laporan" EntitySet="laporans" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="laporan">
+          <Key>
+            <PropertyRef Name="id_laporan" />
+          </Key>
+          <Property Name="id_laporan" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_menu" Type="Int32" />
+          <Property Name="id_pelanggan" Type="Int32" />
+          <Property Name="keterangan" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="meja" Type="Int32" />
+          <Property Name="quantity" Type="DateTime" Precision="3" />
+          <Property Name="harga" Type="Int32" />
+          <Property Name="jumlah" Type="Int32" />
+          <NavigationProperty Name="menu" Relationship="DemoDBModel.FK__laporan__id_menu__49C3F6B7" FromRole="laporan" ToRole="menu" />
+          <NavigationProperty Name="pelanggan" Relationship="DemoDBModel.FK__laporan__id_pela__48CFD27E" FromRole="laporan" ToRole="pelanggan" />
+        </EntityType>
+        <EntityType Name="menu">
+          <Key>
+            <PropertyRef Name="id_menu" />
+          </Key>
+          <Property Name="id_menu" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="menu1" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="stock" Type="Int32" />
+          <Property Name="harga" Type="Int32" />
+          <NavigationProperty Name="laporans" Relationship="DemoDBModel.FK__laporan__id_menu__49C3F6B7" FromRole="menu" ToRole="laporan" />
+        </EntityType>
+        <EntityType Name="pelanggan">
+          <Key>
+            <PropertyRef Name="id_pelanggan" />
+          </Key>
+          <Property Name="id_pelanggan" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="no_id" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="nama" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="alamat" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="no_tlp1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="no_tlp2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="laporans" Relationship="DemoDBModel.FK__laporan__id_pela__48CFD27E" FromRole="pelanggan" ToRole="laporan" />
+        </EntityType>
+        <Association Name="FK__laporan__id_menu__49C3F6B7">
+          <End Type="DemoDBModel.menu" Role="menu" Multiplicity="0..1" />
+          <End Type="DemoDBModel.laporan" Role="laporan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="menu">
+              <PropertyRef Name="id_menu" />
+            </Principal>
+            <Dependent Role="laporan">
+              <PropertyRef Name="id_menu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__laporan__id_pela__48CFD27E">
+          <End Type="DemoDBModel.pelanggan" Role="pelanggan" Multiplicity="0..1" />
+          <End Type="DemoDBModel.laporan" Role="laporan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pelanggan">
+              <PropertyRef Name="id_pelanggan" />
+            </Principal>
+            <Dependent Role="laporan">
+              <PropertyRef Name="id_pelanggan" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -284,6 +423,42 @@
                 <ScalarProperty Name="RowCreatedDateTime" ColumnName="RowCreatedDateTime" />
                 <ScalarProperty Name="RowModifiedSYSUserID" ColumnName="RowModifiedSYSUserID" />
                 <ScalarProperty Name="RowModifiedDateTime" ColumnName="RowModifiedDateTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="laporans">
+            <EntityTypeMapping TypeName="DemoDBModel.laporan">
+              <MappingFragment StoreEntitySet="laporan">
+                <ScalarProperty Name="jumlah" ColumnName="jumlah" />
+                <ScalarProperty Name="harga" ColumnName="harga" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="meja" ColumnName="meja" />
+                <ScalarProperty Name="keterangan" ColumnName="keterangan" />
+                <ScalarProperty Name="id_pelanggan" ColumnName="id_pelanggan" />
+                <ScalarProperty Name="id_menu" ColumnName="id_menu" />
+                <ScalarProperty Name="id_laporan" ColumnName="id_laporan" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="menus">
+            <EntityTypeMapping TypeName="DemoDBModel.menu">
+              <MappingFragment StoreEntitySet="menu">
+                <ScalarProperty Name="harga" ColumnName="harga" />
+                <ScalarProperty Name="stock" ColumnName="stock" />
+                <ScalarProperty Name="menu1" ColumnName="menu" />
+                <ScalarProperty Name="id_menu" ColumnName="id_menu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pelanggans">
+            <EntityTypeMapping TypeName="DemoDBModel.pelanggan">
+              <MappingFragment StoreEntitySet="pelanggan">
+                <ScalarProperty Name="no_tlp2" ColumnName="no_tlp2" />
+                <ScalarProperty Name="no_tlp1" ColumnName="no_tlp1" />
+                <ScalarProperty Name="alamat" ColumnName="alamat" />
+                <ScalarProperty Name="nama" ColumnName="nama" />
+                <ScalarProperty Name="no_id" ColumnName="no_id" />
+                <ScalarProperty Name="id_pelanggan" ColumnName="id_pelanggan" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -29,5 +29,8 @@ namespace Asp_mvc_2.Models.DB
         public virtual DbSet<SYSUser> SYSUsers { get; set; }
         public virtual DbSet<SYSUserProfile> SYSUserProfiles { get; set; }
         public virtual DbSet<SYSUserRole> SYSUserRoles { get; set; }
+        public virtual DbSet<laporan> laporans { get; set; }
+        public virtual DbSet<menu> menus { get; set; }
+        public virtual DbSet<pelanggan> pelanggans { get; set; }
     }
 }

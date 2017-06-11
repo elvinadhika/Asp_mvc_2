@@ -12,6 +12,11 @@
         <AssociationConnector Association="DemoDBModel.FK__SYSUserRo__LOOKU__21B6055D" ManuallyRouted="false" />
         <AssociationConnector Association="DemoDBModel.FK__SYSUserPr__SYSUs__1BFD2C07" ManuallyRouted="false" />
         <AssociationConnector Association="DemoDBModel.FK__SYSUserRo__SYSUs__22AA2996" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DemoDBModel.laporan" Width="1.5" PointX="10.625" PointY="1" />
+        <EntityTypeShape EntityType="DemoDBModel.menu" Width="1.5" PointX="8.375" PointY="1.5" />
+        <EntityTypeShape EntityType="DemoDBModel.pelanggan" Width="1.5" PointX="8.375" PointY="5.25" />
+        <AssociationConnector Association="DemoDBModel.FK__laporan__id_menu__49C3F6B7" />
+        <AssociationConnector Association="DemoDBModel.FK__laporan__id_pela__48CFD27E" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -1,0 +1,114 @@
+﻿@model Asp_mvc_2.Models.ViewModel.MenuDataView
+<div>
+    <h1>Data menu</h1>
+    <table class="table table-striped table-condensed table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Menu</th>
+                <th>Stock</th>
+                <th>Harga</th>
+                <th>Opsi</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var i in Model.MenuProfile)
+        {
+            <tr>
+                <td> @Html.DisplayFor(m => i.id_menu)</td>
+                <td> @Html.DisplayFor(m => i.menu)</td>
+                <td> @Html.DisplayFor(m => i.stock)</td>
+                <td> @Html.DisplayFor(m => i.harga)</td>
+                <td><a href="javascript:void(0)" class="lnkEdit">Edit</a></td>
+                <td><a href="javascript:void(0)" class="lnkDelete">Delete</a></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+<div id="divEdit" style="display:none">
+    <input type="hidden" id="hidID" />
+    <table>
+        <tr>
+            <td>Menu</td>
+            <td><input type="text" id="txtMenu" class="form-control" /></td>
+        </tr>
+        <tr>
+            <td>Stock</td>
+            <td><input type="text" id="txtStock" class="form-control" /></td>
+        </tr>
+        <tr>
+            <td>Harga</td>
+            <td><input type="text" id="txtHarga" class="form-control" /></td>
+        </tr>
+    </table>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        var initDialog = function (type) {
+            var title = type;
+            $("#divEdit").dialog({
+                autoOpen: false,
+                modal: true,
+                title: type + ' Menu',
+                width: 360,
+                buttons: {
+                    Save: function () {
+                        var id = $("#hidID").val();
+                        var menu= $("#txtMenu").val();
+                        var stock = $("#txtStock").val();
+                        var harga = $("#txtHarga").val();
+                        UpdateMenu(id, menu,stock,harga);
+                        $(this).dialog("destroy");
+                    },
+                    Cancel: function () { $(this).dialog("destroy"); }
+                }
+            });
+        }
+        function UpdateMenu(id, nama, stock, hrg) {
+            $.ajax({
+                type: "POST",
+                url: "@(Url.Action("UpdateMenuData", "Menu"))",
+                data: { menuID: id, menu: menu, stock: stock, harga: hrg},
+                success: function (data) {
+                    $("#divUserListContainer").load("@(Url.Action("ManageMenuPartial","Menu", new { status ="update" }))");
+                },
+                error: function (error) {
+                    //to do:
+                }
+            });
+        }
+        $("a.lnkEdit").on("click", function () {
+            initDialog("Edit");
+            $(".alert-success").empty();
+            var row = $(this).closest('tr');
+            $("#hidID").val(row.find("td:eq(0)").html().trim());
+            $("#txtMenu").val(row.find("td:eq(1)").html().trim())
+            $("#txtStock").val(row.find("td:eq(2)").html().trim())
+            $("#txtHarga").val(row.find("td:eq(3)").html().trim())
+            $("#divEdit").dialog("open");
+            return false;
+        });
+        function DeleteMenu(id) {
+            $.ajax({
+                type: "POST",
+                url: "@(Url.Action("DeleteMenu","Menu"))",
+                data: { menuID: id },
+                success: function (data) {
+                    $("#divUserListContainer").load("@(Url.Action("ManageMenuPartial","Menu", new { status ="delete" }))");
+                },
+                error: function (error) { }
+            });
+        }
+        $("a.lnkDelete").on("click", function () {
+            var row = $(this).closest('tr');
+            var id = row.find("td:eq(0)").html().trim();
+            var answer = confirm("apakah anda yakin akan menghapus menu dengan ID " + id + " ?");
+            if (answer) DeleteMenu(id);
+            return false;
+        });
+    });
+    </script>
+<span class="alert-success">@ViewBag.Message</span>
